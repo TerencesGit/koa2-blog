@@ -1,17 +1,35 @@
 const userService = require('../service/userService');
-
+const jwt = require('koa-jwt'); // 引入koa-jwt
 const responseFormatter = function (status, message, data = null) {
-  return {
-    status,
-    message,
-    data,
+  return { status, message, data }
+}
+/**
+ * 用户登录
+ * @param {*} user 
+ */
+exports.login = async (ctx, next) => {
+  let user = ctx.request.body;
+  if(!user.mobile) {
+    ctx.body = new responseFormatter(111, '用户名不能为空');
+  } else if(!user.password) {
+    ctx.body = new responseFormatter(112, '密码不能为空');
+  } else {
+    ctx.body = await userService.login(user);
   }
 }
-// 登录
-exports.login = async (ctx, next) => {
-  ctx.body = await userService.login(ctx.request.body);
-}
-// 注册
+/**
+ * 用户注册
+ * @param {*} user 
+ */
 exports.register = async (ctx, next) => {
-  ctx.body = await userService.resgister(ctx.request.body);
+  let user = ctx.request.body;
+  if(!user.mobile) {
+    ctx.body = new responseFormatter(101, '手机号不能为空');
+  } else if(!user.mobile.match(/^(13|14|15|16|17|18)\d{9}$/)) {
+    ctx.body = new responseFormatter(102, '手机号格式有误');
+  } else if(!user.password) {
+    ctx.body = new responseFormatter(103, '密码不能为空');
+  } else {
+    ctx.body = await userService.resgister(user);
+  }
 }

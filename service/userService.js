@@ -1,6 +1,5 @@
 const userDao = require('../dao/userDao');
 const passport = require('../utils/passport');
-
 const responseFormatter = function (status, message, data = null) {
     return { status, message, data }
 }
@@ -9,21 +8,14 @@ const responseFormatter = function (status, message, data = null) {
  * @param {*} user 
  */
 exports.resgister = async (user) => {
-    if(!user.mobile) {
-        return new responseFormatter(101, '手机号不能为空');
-    } else if(!user.mobile.match(/^(13|14|15|16|17|18)\d{9}$/)) {
-        return new responseFormatter(102, '手机号格式有误');
-    } else if(!user.password) {
-        return new responseFormatter(103, '密码不能为空');
-    }
-    let users = await userDao.getUserByMobile(user.mobile);
+    let users = await userDao.findUserByFieldName('mobile', user.mobile);
     if(users.length > 0) {
         return new responseFormatter(104, '该手机号已注册');
     }
     user.password = await passport.encrypt(user.password);
     let result = await userDao.addUser(user);
     if(result) {
-        let _users = await userDao.getUserByMobile(user.mobile);
+        let _users = await userDao.findUserByFieldName('mobile', user.mobile);
         let resUser = {
             userId: _users[0].user_id,
             userename: _users[0].username,
@@ -39,12 +31,7 @@ exports.resgister = async (user) => {
  * @param {*} user 
  */
 exports.login = async (user) => {
-    if(!user.mobile) {
-        return new responseFormatter(111, '用户名不能为空');
-    } else if(!user.password) {
-        return new responseFormatter(112, '密码不能为空');
-    }
-    let users = await userDao.getUserByMobile(user.mobile);
+    let users = await userDao.findUserByFieldName('mobile', user.mobile);
     if(users.length === 0) {
         return new responseFormatter(113, '用户名不存在');
     }

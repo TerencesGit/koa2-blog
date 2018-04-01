@@ -1,29 +1,13 @@
 const mysql = require('../utils/mysqlUtils.js')
+const passport = require('../utils/passport');
 /**
- * 根据id查询用户信息
+ * 根据fieldName 查询用户
+ * @param {*} fieldName, fieldValue 
  */
-exports.getUserById = async (userId) => {
+exports.findUserByFieldName = async (fieldName, fieldValue) => {
     let mysqlOptions = {
-        sql: 'select * from user where user_id = ?',
-        args: [userId],
-    };
-    return await mysql.execQuery(mysqlOptions);
-}
-/**
- * 根据email 查询用户
- * @param {*} Email 
- */
-exports.getUserByEmail = async (email) => {
-    let mysqlOptions = {
-        sql: 'select * from user where email = ?',
-        args: [email],
-    };
-    return await mysql.execQuery(mysqlOptions);
-}
-exports.getUserByMobile = async (mobile) => {
-    let mysqlOptions = {
-        sql: 'select * from user where mobile = ?',
-        args: [mobile],
+        sql: `select * from user where ${fieldName} = ?`,
+        args: [fieldValue],
     };
     return await mysql.execQuery(mysqlOptions);
 }
@@ -42,7 +26,7 @@ exports.addUser = async (user) => {
 /**
  * 获取所有用户
  */
-exports.getUserAll = async () => {
+exports.findUserAll = async () => {
     let mysqlOptions = {
         sql: 'select * from user',
     };
