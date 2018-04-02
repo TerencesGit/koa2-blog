@@ -1,4 +1,5 @@
 const userService = require('../service/userService');
+const userDao = require('../dao/userDao');
 const jwt = require('koa-jwt'); // 引入koa-jwt
 const responseFormatter = function (status, message, data = null) {
   return { status, message, data }
@@ -32,4 +33,13 @@ exports.register = async (ctx, next) => {
   } else {
     ctx.body = await userService.resgister(user);
   }
+}
+/**
+ * 用户列表
+ * @param {*} ctx 
+ * @param {*} next 
+ */
+exports.findUsers = async (ctx, next) => {
+  let users = await userDao.findUserAll();
+  ctx.body = new responseFormatter(1, '操作成功', users);
 }
