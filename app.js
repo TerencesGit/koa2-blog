@@ -9,18 +9,30 @@ const koajwt = require('koa-jwt')
 const jwt = require('jsonwebtoken')
 const index = require('./routes/index')
 const users = require('./routes/users')
-
 // error handler
 onerror(app)
-
 // middlewares
 app.use(bodyparser({
   enableTypes:['json', 'form', 'text']
 }))
 app.use(json())
 app.use(logger())
-
-app.use(require('koa-static')(__dirname + '/public'))
+app.use(async (ctx, next) => {
+  return next().catch((err) => {
+    if (401 === err.status) {
+      ctx.status = 200;
+      let res = {
+        status: 999,
+        message: 'Protected resource, use Authorization header to get access',
+        data: null
+      }
+      ctx.body = res;
+    } else {
+      throw err;
+    }
+  });
+})
+// app.use(require('koa-static')(__dirname + '/public'))
 // app.use(views(__dirname + '/views', {
 //   extension: 'pug'
 // }))
@@ -36,7 +48,6 @@ app.use(async (ctx, next) => {
 app.use(koajwt({ secret: 'jwt' }).unless({
   path: [/\/public/],
 }))
-
 // routes
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())

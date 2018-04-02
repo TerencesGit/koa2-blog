@@ -42,12 +42,12 @@ exports.login = async (user) => {
         delete _user['password']
         const userToken = {
             id: _user.user_id,
-            // name: _user.username,
+            name: _user.username,
         }
         const secret = 'jwt';
         const token = jwt.sign({
             data: userToken,
-            exp: Math.floor(Date.now() / 1000 ) + (60 * 60)
+            exp: Math.floor(Date.now() / 1000 ) + (60 * 10)
         }, secret)
         return new responseFormatter(1, '登录成功', {_user, token})
     } else {
