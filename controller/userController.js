@@ -1,6 +1,6 @@
 const userService = require('../service/userService');
 const userDao = require('../dao/userDao');
-const jwt = require('koa-jwt'); // 引入koa-jwt
+const jwt = require('jsonwebtoken');
 const responseFormatter = function (status, message, data = null) {
   return { status, message, data }
 }

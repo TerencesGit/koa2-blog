@@ -18,6 +18,9 @@ app.use(bodyparser({
 app.use(json())
 app.use(logger())
 app.use(async (ctx, next) => {
+  if(ctx.request.header.authorization) {
+    ctx.user = jwt.decode(ctx.request.header.authorization.substr(7)).data;
+  }
   return next().catch((err) => {
     if (401 === err.status) {
       ctx.status = 200;
