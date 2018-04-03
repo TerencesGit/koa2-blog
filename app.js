@@ -17,7 +17,7 @@ app.use(bodyparser({
 }))
 app.use(json())
 app.use(logger())
-app.use(async (ctx, next) => {
+app.use(async(ctx, next) => {
   if(ctx.request.header.authorization) {
     ctx.user = jwt.decode(ctx.request.header.authorization.substr(7)).data;
   }
@@ -48,7 +48,7 @@ app.use(async (ctx, next) => {
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
 //jwt
-app.use(koajwt({ secret: 'jwt' }).unless({
+app.use(koajwt({ secret: 'junru' }).unless({
   path: [/\/public/],
 }))
 // routes

@@ -1,6 +1,6 @@
 const router = require('koa-router')()
-
 router.prefix('/user')
+
 const User = require('../controller/userController')
 
 router.post('/public/login', User.login)
