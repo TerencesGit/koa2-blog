@@ -43,3 +43,10 @@ exports.findUsers = async (ctx, next) => {
   let users = await userDao.findUserAll();
   ctx.body = new responseFormatter(1, '操作成功', users);
 }
+/**
+*  更新用户
+*/
+exports.updateUserInfo = async (ctx, next) => {
+  let user = ctx.request.body;
+  ctx.body = await userDao.updateUserById(user);
+}

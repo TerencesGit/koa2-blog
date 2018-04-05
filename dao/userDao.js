@@ -32,3 +32,13 @@ exports.findUserAll = async () => {
     };
     return await mysql.execQuery(mysqlOptions);
 }
+/**
+* 更新用户信息
+*/
+exports.updateUserById = async(user) => {
+    let mysqlOptions = {
+        sql: 'update user set username = ?, avatar = ?, gender = ? where user_id = ?',
+        args: [user.username, user.avatar, user.gender , user.user_id]
+    }
+    return await mysql.execQuery(mysqlOptions);
+}

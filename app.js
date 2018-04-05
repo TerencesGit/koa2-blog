@@ -17,7 +17,7 @@ app.use(bodyparser({
 }))
 app.use(json())
 app.use(logger())
-app.use(async(ctx, next) => {
+app.use(async (ctx, next) => {
   if(ctx.request.header.authorization) {
     ctx.user = jwt.decode(ctx.request.header.authorization.substr(7)).data;
   }
@@ -35,6 +35,7 @@ app.use(async(ctx, next) => {
     }
   });
 })
+
 // app.use(require('koa-static')(__dirname + '/public'))
 // app.use(views(__dirname + '/views', {
 //   extension: 'pug'
