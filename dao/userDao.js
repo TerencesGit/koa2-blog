@@ -35,10 +35,20 @@ exports.findUserAll = async () => {
 /**
 * 更新用户信息
 */
-exports.updateUserById = async(user) => {
+exports.updateUserInfo = async(user) => {
     let mysqlOptions = {
         sql: 'update user set username = ?, avatar = ?, gender = ? where user_id = ?',
         args: [user.username, user.avatar, user.gender , user.user_id]
+    }
+    return await mysql.execQuery(mysqlOptions);
+}
+/**
+* 更新用户头像
+*/
+exports.updateUserAvatar = async(user) => {
+    let mysqlOptions = {
+        sql: 'update user set avatar = ? where user_id = ?',
+        args: [user.avatar, user.user_id]
     }
     return await mysql.execQuery(mysqlOptions);
 }

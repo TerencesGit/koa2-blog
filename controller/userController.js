@@ -44,9 +44,16 @@ exports.findUsers = async (ctx, next) => {
   ctx.body = new responseFormatter(1, '操作成功', users);
 }
 /**
-*  更新用户
+*  更新用户信息
 */
 exports.updateUserInfo = async (ctx, next) => {
   let user = ctx.request.body;
-  ctx.body = await userDao.updateUserById(user);
+  ctx.body = await userDao.updateUserInfo(user);
+}
+/**
+*  更新用户头像
+*/
+exports.updateUserAvatar = async (ctx, next) => {
+  let user = ctx.request.body;
+  ctx.body = await userDao.updateUserAvatar(user);
 }
