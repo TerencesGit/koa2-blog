@@ -52,3 +52,13 @@ exports.updateUserAvatar = async(user) => {
     }
     return await mysql.execQuery(mysqlOptions);
 }
+/**
+* 更新用户密码
+*/
+exports.updatePassword = async(user) => {
+    let mysqlOptions = {
+        sql: 'update user set password = ? where user_id = ?',
+        args: [user.newPassword, user.user_id]
+    }
+    return await mysql.execQuery(mysqlOptions);
+}

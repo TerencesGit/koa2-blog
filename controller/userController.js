@@ -1,5 +1,6 @@
 const userService = require('../service/userService');
 const userDao = require('../dao/userDao');
+const passport = require('../utils/passport');
 const jwt = require('jsonwebtoken');
 const responseFormatter = function (status, message, data = null) {
   return { status, message, data }
@@ -53,7 +54,25 @@ exports.updateUserInfo = async (ctx, next) => {
 /**
 *  更新用户头像
 */
-exports.updateUserAvatar = async (ctx, next) => {
+exports.updateAvatar = async (ctx, next) => {
   let user = ctx.request.body;
   ctx.body = await userDao.updateUserAvatar(user);
+}
+/**
+* 修改密码
+*/
+exports.updatePassword = async (ctx, next) => {
+  let tokenUser = ctx.user;
+  let user = ctx.request.body;
+  let isCompared = await passport.validate(user.password, tokenUser.password);
+  if(isCompared) {
+    let newPassword = await passport.encrypt(user.newPassword); 
+    let _user = {
+      user_id: tokenUser.user_id,
+      newPassword: newPassword
+    }
+    ctx.body = await userDao.updatePassword(_user);
+  } else {
+    ctx.body = new responseFormatter(301, '原密码错误', users);
+  }
 }
