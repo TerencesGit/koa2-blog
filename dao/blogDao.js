@@ -31,7 +31,6 @@ exports.updateBlogById = async (blog) => {
         sql: 'update blog set title = ?, content = ?, update_time = ? where id = ?',
         args: [blog.title, blog.content, new Date(), blog.id],
     }
-    console.log(mysqlOptions)
     let result = await mysql.execQuery(mysqlOptions);
     return result;
 }

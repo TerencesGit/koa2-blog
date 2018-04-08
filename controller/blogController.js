@@ -45,10 +45,16 @@ exports.findBlogAll = async (ctx, next) => {
  * @param {*} ctx 
  * @param {*} next 
  */
-exports.updateBlogById = async (ctx, next) => {
+exports.updateBlog = async (ctx, next) => {
     let blog = ctx.request.body;
-    let result = await blogDao.updateBlogById(blog);
-    ctx.body = new responseFormatter(1, '操作成功');
+    let tokenUser = ctx.user;
+    let blogInfo = await blogDao.findBlogByFieldName('id', blog.id);
+    if(tokenUser.user_id === blogInfo[0].create_by) {
+        let result = await blogDao.updateBlogById(blog);
+        ctx.body = new responseFormatter(1, '操作成功');
+    } else {
+        ctx.body = new responseFormatter(2, '删除失败，非本人操作');
+    }
 }
 /**
  * 查询博客 
@@ -67,8 +73,15 @@ exports.findBlogById = async (ctx, next) => {
  * @param {*} ctx 
  * @param {*} next 
  */
-exports.delBlogById = async (ctx, next) => {
+exports.delBlog = async (ctx, next) => {
+    let tokenUser = ctx.user;
     let blogId = ctx.request.body.id;
-    let result = await blogDao.delBlogById(blogId);
-    ctx.body = new responseFormatter(1, '操作成功');
+    let blogInfo = await blogDao.findBlogByFieldName('id', blogId);
+    if(tokenUser.user_id === blogInfo[0].create_by) {
+        let result = await blogDao.delBlogById(blogId);
+        ctx.body = new responseFormatter(1, '操作成功');
+    } else {
+        ctx.body = new responseFormatter(2, '删除失败，非本人操作');
+    }
+    
 }

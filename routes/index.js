@@ -6,9 +6,9 @@ router.get('/blog/findBlogAll.do', Blog.findBlogAll)
 
 router.post('/blog/createBlog.do', Blog.createBlog)
 
-router.post('/blog/updateBlog.do', Blog.updateBlogById)
+router.post('/blog/updateBlog.do', Blog.updateBlog)
 
-router.post('/blog/delBlog.do', Blog.delBlogById)
+router.post('/blog/delBlog.do', Blog.delBlog)
 
 router.get('/blog/findBlogById.do', Blog.findBlogById)
 
