@@ -35,7 +35,7 @@ exports.updateBlogById = async (blog) => {
     return result;
 }
 /**
- * 获取所有用户
+ * 获取所有blog
  */
 exports.findBlogAll = async () => {
     let mysqlOptions = {
@@ -43,6 +43,7 @@ exports.findBlogAll = async () => {
     };
     return await mysql.execQuery(mysqlOptions);
 }
+// 删除blog
 exports.delBlogById = async (blogId) => {
     let mysqlOptions = {
         sql: 'delete from blog where id = ?',

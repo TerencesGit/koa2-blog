@@ -73,6 +73,19 @@ exports.updatePassword = async (ctx, next) => {
     }
     ctx.body = await userDao.updatePassword(_user);
   } else {
-    ctx.body = new responseFormatter(301, '原密码错误', users);
+    ctx.body = new responseFormatter(301, '原密码错误');
+  }
+}
+/**
+ * 获取用户信息
+ * @param {*} ctx 
+ * @param {*} next 
+ */
+exports.findUserInfo = async (ctx, next) => {
+  let tokenUser = jwt.decode(ctx.request.header.authorization.substr(7)).data;
+  if(tokenUser) {
+    ctx.body = new responseFormatter(1, '获取成功', tokenUser);
+  } else {
+    ctx.body = new responseFormatter(401, '获取失败');
   }
 }

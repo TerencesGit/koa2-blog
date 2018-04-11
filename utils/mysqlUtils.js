@@ -27,6 +27,7 @@ const execQuery = sqlOptions => {
     let results = new Promise((resolve, reject) => {
         connectionPool.getConnection((err, connection) => {
             if(err) {
+                console.log(err);
                 throw err;
             }
             let sql = sqlOptions['sql'];

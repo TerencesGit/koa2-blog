@@ -9,6 +9,8 @@ router.post('/public/register', User.register)
 
 router.get('/findUsers.do', User.findUsers)
 
+router.get('/findUserInfo.do', User.findUserInfo)
+
 // router.get('/', function (ctx, next) {
 //   ctx.body = 'this is a users response!'
 // })
