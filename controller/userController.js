@@ -2,6 +2,8 @@ const userService = require('../service/userService');
 const userDao = require('../dao/userDao');
 const passport = require('../utils/passport');
 const jwt = require('jsonwebtoken');
+const fs = require('fs')
+const path = require('path')
 const responseFormatter = function (status, message, data = null) {
   return { status, message, data }
 }
@@ -88,4 +90,22 @@ exports.findUserInfo = async (ctx, next) => {
   } else {
     ctx.body = new responseFormatter(401, '获取失败');
   }
+}
+
+exports.uploadFile = async(ctx, next) => {
+  // console.log(new Date().toLocaleDateString())
+  // console.log(new Date().toLocaleTimeString())
+  let file = ctx.req.file;
+  const { originalname } = file;
+  let cachepath = file.path;
+  let stamp = new Date().getTime();
+  let filenameArr = originalname.split('.');
+  let filetype = filenameArr[filenameArr.length - 1];
+  let fileName = filenameArr[0] + '_' + stamp + '.' + filetype;
+  let filepath = path.join(__dirname, '..', cachepath);
+  let destpath = path.join('./data/upload', fileName)
+  // console.log(destpath)
+  fs.createReadStream(filepath).pipe(fs.createWriteStream(destpath));
+  fs.unlink(filepath, async (ctx, next) => {})
+  ctx.body = new responseFormatter(1, '上传成功', destpath);
 }

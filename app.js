@@ -35,8 +35,7 @@ app.use(async (ctx, next) => {
     }
   });
 })
-
-// app.use(require('koa-static')(__dirname + '/public'))
+app.use(require('koa-static')(__dirname + '/data/upload'))
 // app.use(views(__dirname + '/views', {
 //   extension: 'pug'
 // }))
