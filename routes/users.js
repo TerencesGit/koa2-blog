@@ -11,6 +11,8 @@ router.get('/findUsers.do', User.findUsers)
 
 router.get('/findUserInfo.do', User.findUserInfo)
 
+router.post('/updateAvatar.do', User.updateAvatar)
+
 // router.get('/', function (ctx, next) {
 //   ctx.body = 'this is a users response!'
 // })

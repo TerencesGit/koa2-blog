@@ -2,7 +2,7 @@ const router = require('koa-router')()
 const User = require('../controller/userController')
 const Blog = require('../controller/blogController')
 const multer = require('koa-multer')
-const upload = multer({dest: './data'})
+const upload = multer({dest: './public'})
 router.get('/blog/findBlogAll.do', Blog.findBlogAll)
 
 router.post('/blog/createBlog.do', Blog.createBlog)

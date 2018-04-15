@@ -54,13 +54,6 @@ exports.updateUserInfo = async (ctx, next) => {
   ctx.body = await userDao.updateUserInfo(user);
 }
 /**
-*  更新用户头像
-*/
-exports.updateAvatar = async (ctx, next) => {
-  let user = ctx.request.body;
-  ctx.body = await userDao.updateUserAvatar(user);
-}
-/**
 * 修改密码
 */
 exports.updatePassword = async (ctx, next) => {
@@ -85,27 +78,44 @@ exports.updatePassword = async (ctx, next) => {
  */
 exports.findUserInfo = async (ctx, next) => {
   let tokenUser = jwt.decode(ctx.request.header.authorization.substr(7)).data;
-  if(tokenUser) {
-    ctx.body = new responseFormatter(1, '获取成功', tokenUser);
+  let { user_id } = tokenUser;
+  let users = await userDao.findUserByFieldName('user_id', user_id)
+  if(users.length > 0) {
+    ctx.body = new responseFormatter(1, '获取成功', users[0]);
   } else {
     ctx.body = new responseFormatter(401, '获取失败');
   }
 }
-
+/**
+ * 上传图片
+ * @param {*} ctx 
+ * @param {*} next 
+ */
 exports.uploadFile = async(ctx, next) => {
-  // console.log(new Date().toLocaleDateString())
-  // console.log(new Date().toLocaleTimeString())
   let file = ctx.req.file;
-  const { originalname } = file;
+  let { originalname } = file;
   let cachepath = file.path;
   let stamp = new Date().getTime();
   let filenameArr = originalname.split('.');
   let filetype = filenameArr[filenameArr.length - 1];
   let fileName = filenameArr[0] + '_' + stamp + '.' + filetype;
   let filepath = path.join(__dirname, '..', cachepath);
-  let destpath = path.join('./data/upload', fileName)
-  // console.log(destpath)
+  let destpath = path.join( './public/upload', fileName)
+  let serverpath = `/upload/${fileName}`;
   fs.createReadStream(filepath).pipe(fs.createWriteStream(destpath));
   fs.unlink(filepath, async (ctx, next) => {})
-  ctx.body = new responseFormatter(1, '上传成功', destpath);
+  ctx.body = new responseFormatter(1, '上传成功', serverpath);
+}
+/**
+*  更新用户头像
+*/
+exports.updateAvatar = async (ctx, next) => {
+  let { user_id } = ctx.user;
+  let { avatar } = ctx.request.body;
+  let user = {
+    user_id,
+    avatar,
+  }
+  let res = await userDao.updateUserAvatar(user);
+  ctx.body = new responseFormatter(1, '更新成功', res);
 }
