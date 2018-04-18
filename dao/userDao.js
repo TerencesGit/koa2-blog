@@ -62,3 +62,15 @@ exports.updatePassword = async(user) => {
     }
     return await mysql.execQuery(mysqlOptions);
 }
+/**
+ * 添加文件
+ * @param {*} file 
+ */
+exports.addFile = async (file) => {
+    let mysqlOptions = {
+        sql: 'insert into file (filename, filepath, size, create_time) values (?,?,?,?)',
+        args: [file.filename, file.filepath, file.size, new Date()],
+    }
+    let result = await mysql.execQuery(mysqlOptions);
+    return result;
+}

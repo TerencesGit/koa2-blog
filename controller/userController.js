@@ -93,7 +93,7 @@ exports.findUserInfo = async (ctx, next) => {
  */
 exports.uploadFile = async(ctx, next) => {
   let file = ctx.req.file;
-  let { originalname } = file;
+  let { originalname, size } = file;
   let cachepath = file.path;
   let stamp = new Date().getTime();
   let filenameArr = originalname.split('.');
@@ -104,6 +104,12 @@ exports.uploadFile = async(ctx, next) => {
   let serverpath = `/upload/${fileName}`;
   fs.createReadStream(filepath).pipe(fs.createWriteStream(destpath));
   fs.unlink(filepath, async (ctx, next) => {})
+  let fileObj = {
+    filename: originalname,
+    filepath: serverpath,
+    size,
+  }
+  let result = await userDao.addFile(fileObj);
   ctx.body = new responseFormatter(1, '上传成功', serverpath);
 }
 /**

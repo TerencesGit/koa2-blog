@@ -40,14 +40,10 @@ exports.login = async (user) => {
     let isCompared = await passport.validate(user.password, _user.password);
     if(isCompared) {
         delete _user['password']
-        // const userToken = {
-        //     id: _user.user_id,
-        //     name: _user.username,
-        // }
-        const secret = 'junru';
+        const secret = 'transform';
         const token = jwt.sign({
             data: _user,
-            exp: Math.floor(Date.now() / 1000 ) + (60 * 30)
+            exp: Math.floor(Date.now() / 1000 ) + (60 * 60)
         }, secret)
         return new responseFormatter(1, '登录成功', {_user, token})
     } else {
